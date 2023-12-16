@@ -2,19 +2,20 @@
 
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
-import { MenuIcon, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
+import MobileSidebar from "./MobileSidebar";
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
 const Navbar = () => {
   return (
-    <div className="fixed z-50 w-full flex justify-between items-center py-2 px-4 border-b border-primary/20 bg-secondary">
+    <div className="fixed z-50 w-full flex justify-between items-center py-3 px-4 border-b border-primary/20 bg-secondary">
       <div className="flex items-center">
-        <MenuIcon className="block md:hidden" />
+        <MobileSidebar />
         <Link className="hidden md:block" href={"/"}>
           <h1
             className={cn(
@@ -25,16 +26,15 @@ const Navbar = () => {
             ally-ai.
           </h1>
         </Link>
-     
       </div>
       <div className="flex items-center gap-x-3">
-        <Button size={'sm'} variant={'premium'}>
-            Upgrade 
-             <Sparkles className="h-4 w-4 fill-white text-white" />
+        <Button size={"sm"} variant={"premium"}>
+          Upgrade
+          <Sparkles className="h-4 w-4 fill-white text-white" />
         </Button>
-       <UserButton/>
-       <ModeToggle/>
-       </div>
+        <UserButton />
+        <ModeToggle />
+      </div>
     </div>
   );
 };
