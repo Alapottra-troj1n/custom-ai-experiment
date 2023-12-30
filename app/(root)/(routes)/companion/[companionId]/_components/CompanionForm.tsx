@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
+import { Select, SelectTrigger } from "@/components/ui/select";
+import { SelectContent, SelectItem, SelectValue } from "@radix-ui/react-select";
 
 interface CompanionFormProps {
   initialData: Companion | null;
@@ -100,12 +102,12 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
             <FormField
               name="name"
               render={({ field }) => (
-                <FormItem className="flex flex-col justify-center space-y-4 ">
+                <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel>Companion Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
-                      placeholder="Companion Name"
+                      placeholder="Elon Musk"
                       {...field}
                     />
                   </FormControl>
@@ -116,9 +118,63 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              name="description"
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-1">
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Elon Musk is the CEO of Tesla."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Short description for your AI Companion
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    disabled={isLoading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Category"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select a category for your AI
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
           </div>
 
-          <div className="w-full flex justify-center">
+          <div className="w-full flex">
             <Button size="lg" disabled={isLoading}>
               {initialData ? "Edit your companion" : "Create your companion"}
               <Wand2 className="w-4 h-4 ml-2" />
