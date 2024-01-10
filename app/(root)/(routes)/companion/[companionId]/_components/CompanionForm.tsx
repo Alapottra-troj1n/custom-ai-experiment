@@ -4,6 +4,7 @@ import { Category, Companion } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from 'axios'
 import {
   Form,
   FormControl,
@@ -26,6 +27,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+
 
 interface CompanionFormProps {
   initialData: Companion | null;
@@ -81,9 +84,24 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
     },
   });
   const isLoading = form.formState.isSubmitting;
+  const {toast} = useToast();
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async(values: z.infer<typeof formSchema>) => {
+    try {
+      if(initialData){
+        //update
+        await axios.patch(`/api/companion/${initialData.id}`, values)
+      }else{
+        //create
+        await axios.post('/api/companion', values)
+      }
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        description: 'Something Went Wrong'
+      })
+      console.error(error, "SOMETHING WENT WRONG");
+    }
   };
 
   return (
@@ -190,6 +208,7 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
                   <FormDescription>
                     Select a category for your AI
                   </FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -228,7 +247,7 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
             )}
           />
 
-<FormField
+          <FormField
             name="seed"
             render={({ field }) => (
               <FormItem className="col-span-2 md:col-span-1">

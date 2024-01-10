@@ -8,7 +8,7 @@ interface CompanionIdPageProps {
 }
 
 const CompanionIdPage = async ({ params }: CompanionIdPageProps) => {
-  //TODO check subscription
+
 
   const companion = await prismadb.companion.findUnique({
     where: {
