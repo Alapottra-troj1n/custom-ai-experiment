@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 
 interface CompanionFormProps {
@@ -85,6 +86,7 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
   });
   const isLoading = form.formState.isSubmitting;
   const {toast} = useToast();
+  const router = useRouter();
 
   const onSubmit = async(values: z.infer<typeof formSchema>) => {
     try {
@@ -93,8 +95,15 @@ const CompanionForm = ({ categories, initialData }: CompanionFormProps) => {
         await axios.patch(`/api/companion/${initialData.id}`, values)
       }else{
         //create
+      
         await axios.post('/api/companion', values)
       }
+      toast({
+        description: 'Success'
+      })
+
+      router.refresh();
+      router.push('/')
     } catch (error) {
       toast({
         variant: 'destructive',
